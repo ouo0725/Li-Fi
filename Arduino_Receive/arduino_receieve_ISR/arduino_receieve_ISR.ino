@@ -1,22 +1,12 @@
-const byte interrupt = 18;
+const byte interrupt = 2;
 volatile boolean Potential = true;
 volatile boolean a = false;
-float Interval = 1000;
+float Interval =1000;
 volatile unsigned long int Last_time = 0;
-volatile unsigned long int Now = 0;
-volatile float count;
-
-void InterruptChange(){  
-    a = true;
-}
-
-void Counting_Signal(){
-  Now = micros();
-  count = round((Now - Last_time)/Interval);
-  // Serial.print(count);
-  Last_time = Now;
-  // Serial.print("\n");
-}
+volatile int count;
+String CodeBook = "";
+String copyofPotential;
+char buf[500];
 
 void setup (){
     attachInterrupt(digitalPinToInterrupt(interrupt), InterruptChange, CHANGE);
@@ -27,14 +17,53 @@ void loop (){
     if(a == true){
       Counting_Signal();
       Potential = !Potential;
-      if(count < 19 && count > 0){
-        for(int i=1 ; i<=count ; i++){
-          Serial.print(Potential);
-          Serial.print("\n");
-        }
-       }
-      a = false;       
-    }
+       if(count < 21){
+               Serial.print(count);
+               Serial.print("\n");
+//        if(count == 20)
+//           Serial.print('3');
+// //        Serial.print(' ');
+// //        Serial.println(count);
+      
+//        else{
+//         // for(int i=1 ; i<=count ; i++){
+//         //   //CodeBook.concat(copyofPotential);
+//         //   Serial.print(Potential);
+         }
+           a = false;    
+      }
+ }    
+   // }
+    
+//    if(count >= 20){
+////      //Serial.print(CodeBook.length());
+////      //Serial.println(CodeBook);
+////      char buf[CodeBook.length()-1];
+////      CodeBook.toCharArray(buf,CodeBook.length());
+////      //Serial.print(buf);
+////      CodeBook = "";
+////
+////      
+//////      exit(0);
+////    }
+//    if(CodeBook.length() == 100){
+//      //Serial.print(CodeBook.length());
+//      //Serial.println(CodeBook);
+//      CodeBook.toCharArray(buf,CodeBook.length());
+//      //Serial.print(buf);
+//    }
+//}
+
+void InterruptChange(){  
+    //Potential = !Potential;
+    a = true;
 }
 
-
+void Counting_Signal(){
+  count = round((micros() - Last_time)/Interval);
+  //Serial.println(count);
+  if(count != 1){
+  //Serial.println((micros() - Last_time)/Interval);
+  }
+  Last_time = micros();
+}
